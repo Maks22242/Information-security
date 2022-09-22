@@ -1,0 +1,91 @@
+
+#include <iostream>
+#include <fstream>
+#include <list>
+#include <map>
+#include <string>
+
+using namespace std;
+
+void func(list<int> List,int N,int C,int D)
+{
+    ofstream f2("output.txt");
+    list <int> list_dub = List; 
+    List.unique(); // Удаляем повторяющиеся элементы
+    map <int, int> mp;//Создаём словарь
+    int ok = 1;
+    for (auto i = List.begin(); i != List.end(); i++)
+    {
+        int numb = *i;
+        int sch = 0;
+        int el;        
+        do
+        {
+            sch++;
+            el = (numb + N * sch - C) % D;
+        } while (el!=0);
+        el = (numb + N * sch - C) / D;
+        if (mp.count(el)) //если такой элемент уже есть у нас в словаре, Пытаемся найти другую расшифровку
+        {
+            int next_el;
+            int prov = 1;//проверка на совпадения
+            do
+            {
+                do
+                {
+                    sch++;
+                    next_el = (numb + N * sch - C) % D;
+                } while (next_el != 0);
+                next_el = (numb + N * sch - C) / D;
+                if (next_el == el)
+                {
+                    f2 << "нет";
+                    prov = 0;
+                    ok = 0;
+                }
+                else if (!mp.count(next_el))
+                {
+                    mp[numb] = el;
+                    prov = 0;
+                }
+            }while (prov);
+        }
+        else
+            mp[numb] = el;
+    }
+   
+    if (ok) // В случае если ошибок нет, выводим ответ
+    {
+         f2 << "ДА\n";
+            for (auto i = list_dub.begin(); i != list_dub.end(); i++)
+            {
+                f2 << mp[*i] << " ";
+            }
+
+            f2.close();
+    }
+    f2.close();
+}
+
+int main()
+{
+    ifstream f1("input.txt");
+    ofstream f2("output.txt");
+    string N, M, D, C;
+    list <int> List;
+    f1 >> N;
+    f1 >> M;
+    f1 >> D;
+    f1 >> C;     
+    while (!f1.eof()) // Запись чисел в список
+    {
+        string word;
+        f1 >> word;
+        if(word!="")
+        List.push_back(stoi(word));
+    } 
+    func(List, stoi(N), stoi(C), stoi(D));
+  f1.close();
+
+
+}
