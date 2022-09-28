@@ -1,0 +1,60 @@
+
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+
+int main()
+{
+    ifstream f1("input.txt");
+    ofstream f2("output.txt");
+    int N;
+    f1 >> N;
+    string str1, str2, new_str = "";
+    f1 >> str1 >> str2;
+    int ok = 1, sym = 65; // sym - Код симврла A в аски таблице
+    new_str = new_str + str1 + str2;
+    for (int i = 0; i < new_str.size()-N;)
+    {
+        int sum = 0, kol = 0;        
+        sym = 65;
+        int k = i;
+        while (k < (i + N + 1)) // ищем колическво первых загланыхбукв в произвольном порядке
+        {
+            int sym_str = (int)new_str[k];
+            if (sym_str == sym)
+            {
+                sym++;
+                k = i;
+                kol++;
+            }
+            else {
+                k++;
+            }
+        }
+
+        if (kol == N)
+        {
+            i++;
+        }
+        else // если недостаточно, то добавляем недостоющий символ
+        {
+            string re_new_str = "";
+            int poz = (N + 1) / 2, per = 0;
+            for (int z = 0; z < new_str.size(); z++)
+            {
+                if (z == i + poz)
+                {
+                    re_new_str = re_new_str + new_str[i - 1] + new_str[i];
+                }
+                else
+                    re_new_str += new_str[z];
+            }
+            new_str = re_new_str;
+        }
+    }
+    f2 << new_str;
+    f1.close();
+    f2.close();
+}
