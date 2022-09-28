@@ -1,0 +1,59 @@
+
+
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+    std::cout << "Hello World!\n";
+    ifstream f_in("input.txt");
+    int n;
+    f_in >> n;
+    int **mtrx = new int* [n]; //  Создаём матрицу
+    for (int i = 0; i < n; i++)
+    {
+        mtrx[i] = new int[3];
+    }
+    // записываем элементы в матрицу
+    string str;
+    for (int i = 0; i < n; i++)
+    {
+        for (int z = 0; z < 3; z++)
+        {
+            f_in >> str;
+            mtrx[i][z] =  stoi(str);
+        }
+        
+    }
+    int kol = 0; // Количество пар друзей
+    for (int i = 0; i < n; i++)
+    {
+        
+        for (int z = n - 1; z > i; z--)
+        {
+            int sov = 0; // количество одинаковых показателей учеников
+            int k = 2;
+            while (k >= 0)
+            {
+                if (mtrx[i][k] == mtrx[z][k])
+                {
+                    k--;
+                    sov++;
+                }
+                else
+                    k--;
+            }
+            if (sov == 1)
+            {
+                kol++;
+            }
+        }
+    }
+    f_in.close();
+    ofstream f_out("output.txt");
+    f_out << kol;
+    f_out.close();
+}
