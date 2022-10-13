@@ -24,6 +24,7 @@ void Print_Arr_int(int* arr, int len)
 void Pint_Matr_str(string*** A, int n, int m)
 {
 
+    cout << "\n";
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < m; j++)
@@ -41,7 +42,7 @@ bool proverka(string*** A, int* LS, int* LO, int n, int m)
     {
         for (int j = 0; j < m; j++)
         {
-            if ((LS[i] > LO[j] && stoi(A[i][j][0]) == 1) || (LS[i] < LO[j] && stoi(A[i][j][1]) == 1))
+            if ((LS[i] < LO[j] && stoi(A[i][j][0]) == 1) || (LS[i] > LO[j] && stoi(A[i][j][1]) == 1))
             {
                 ok = false;
                 cout << "\nМатрица не прошла проверку на Субъекте " << i << " и объекте " << j;
@@ -49,6 +50,25 @@ bool proverka(string*** A, int* LS, int* LO, int n, int m)
         }
     }
     return ok;
+}
+
+string*** filling_MTR(string*** A, int* LS, int* LO, int n, int m)
+{
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            if(LS[i] >= LO[j])
+                A[i][j][0] = to_string (1);
+            else
+                A[i][j][0] = to_string(0);
+            if(LS[i] <= LO[j])
+                A[i][j][1] = to_string(1);
+            else
+                A[i][j][1] = to_string(0);
+        }
+    }
+    return A;
 }
 
 
@@ -91,8 +111,7 @@ int main()
     Pint_Matr_str(A, n, m);
     Print_Arr_int(LS, n);
     Print_Arr_int(LO, m);
-    if (proverka(A, LO, LS, n, m))
-        cout << "\nДанная матрица прошлапроверку. Ураааааааа!!!";
+    if (proverka(A, LS, LO, n, m))
+        cout << "\nДанная матрица прошла проверку. Ураааааааа!!!";
     else
         cout << "\nДанная матрица не прошла проверку :(";
-}
